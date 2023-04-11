@@ -12,8 +12,8 @@ def main() -> None:
     words = read_words(words_path.read_text())
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
     while word := get_next_word(words, progress, ask_schedule):
-        if ask_word(words[word]):
-            progress.append(word)
+        if ask_word(word):
+            progress.append(word.word)
             progress_path.write_text(write_progress(progress))
             progress_bak_path.write_text(write_progress(progress))
         print(f"Total progress: {len(progress)}/{len(words) * len(ask_schedule)}")
