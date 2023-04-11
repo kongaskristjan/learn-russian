@@ -1,16 +1,7 @@
 
 from pathlib import Path
-from src.file_io import read_words, read_progress, write_progress
+from src.file_io import read_words, read_progress, write_progress, Word
 from src.algorithm import WordChoiceAlgorithm
-
-def get_word_choice_algorithm(words_path: Path, progress_path: Path) -> WordChoiceAlgorithm:
-    """Return an algorithm to choose words to ask."""
-    ask_schedule = [0, 20, 50, 150, 500]
-    false_answer_delay = 20
-
-    words = read_words(words_path.read_text())
-    progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
-    return WordChoiceAlgorithm(words, progress, ask_schedule, false_answer_delay)
 
 def main() -> None:
     """A program to learn russian words from their translations."""
@@ -27,6 +18,19 @@ def main() -> None:
         print(f"Total progress: {len(algorithm.progress)}/{len(algorithm.words) * len(algorithm.ask_schedule)}")
     print(f"Congratulations! You have learned all {len(algorithm.words)} words!")
 
+def get_word_choice_algorithm(words_path: Path, progress_path: Path) -> WordChoiceAlgorithm:
+    """Return an algorithm to choose words to ask."""
+    ask_schedule = [0, 20, 50, 150, 500]
+    false_answer_delay = 20
+
+    words = read_words(words_path.read_text())
+    progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
+    return WordChoiceAlgorithm(words, progress, ask_schedule, false_answer_delay)
+
+def ask_word(word: Word) -> bool:
+    """Ask a word and return whether the user answered correctly."""
+    answer = input(f"{word.translation} ({word.part_of_speech}): ")
+    return answer == word.word
 
 if __name__ == "__main__":
     main()
