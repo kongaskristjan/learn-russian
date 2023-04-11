@@ -1,5 +1,5 @@
 
-from src.file_io import read_words, read_progress, write_progress, Word
+from src.file_io import read_words, read_progress, write_progress, Word, HistoryEntry
 
 def test_read_words():
     inp = \
@@ -14,19 +14,17 @@ def test_read_words():
     assert read_words(inp) == expected
 
 def test_read_progress():
-    inp = \
-"""и
-в"""
+    inp = "и;True\nв;False"
     expected = [
-        "и",
-        "в",
+        HistoryEntry("и", True),
+        HistoryEntry("в", False),
     ]
     assert read_progress(inp) == expected
 
 def test_write_progress():
     inp = [
-        "и",
-        "в",
+        HistoryEntry("и", True),
+        HistoryEntry("в", False),
     ]
-    expected = "и\nв"
+    expected = "и;True\nв;False"
     assert write_progress(inp) == expected
