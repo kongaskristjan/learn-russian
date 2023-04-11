@@ -15,7 +15,9 @@ def main() -> None:
         algorithm.update_progress(word.word, correct)
         progress_path.write_text(write_progress(algorithm.progress))
         progress_bak_path.write_text(write_progress(algorithm.progress))
-        print(f"Total progress: {len(algorithm.progress)}/{len(algorithm.words) * len(algorithm.ask_schedule)}")
+        correct_count = len([entry for entry in algorithm.progress if entry.correct])
+        print(f"Total progress: {correct_count}/{len(algorithm.words) * len(algorithm.ask_schedule)}")
+        print()
     print(f"Congratulations! You have learned all {len(algorithm.words)} words!")
 
 def get_word_choice_algorithm(words_path: Path, progress_path: Path) -> WordChoiceAlgorithm:
@@ -30,7 +32,17 @@ def get_word_choice_algorithm(words_path: Path, progress_path: Path) -> WordChoi
 def ask_word(word: Word) -> bool:
     """Ask a word and return whether the user answered correctly."""
     answer = input(f"{word.translation} ({word.part_of_speech}): ")
-    return answer == word.word
+    correct = answer == word.word
+    if correct:
+        print()
+        print("+++       CORRECT       +++")
+        print()
+    else:
+        print()
+        print("---        WRONG        ---")
+        print()
+        print(f"The correct answer was {word.word}.")
+    return correct
 
 if __name__ == "__main__":
     main()

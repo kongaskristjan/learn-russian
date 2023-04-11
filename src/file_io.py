@@ -39,4 +39,16 @@ def read_words(words: str) -> list[Word]:
     words = words.splitlines()
     words = [word.split(";") for word in words]
     words = [Word(word[0], word[1], word[2]) for word in words]
+
+    seen_words = {w.word: 0 for w in words}
+    for word in words:
+        seen_words[word.word] += 1
+
+    errors = 0
+    for s in seen_words:
+        if seen_words[s] != 1:
+            print(f"Error: Duplicate word {s} found")
+            errors += 1
+    assert errors == 0, f"{errors} errors found"
+
     return words

@@ -17,6 +17,7 @@ class WordChoiceAlgorithm:
         self.false_answer_delay = false_answer_delay
 
         self.word_to_index = {word.word: i for i, word in enumerate(words)}
+        assert self.word_to_index[words[-1].word] == len(words) - 1
 
         self.progress_index = 0
         self.progress = []
