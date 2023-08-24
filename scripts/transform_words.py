@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from src.file_io import write_words, Word
 
-def read_words_from_lines(input: str) -> list[tuple[str, str, str]]:
+def read_words_from_lines(input: str) -> list[Word]:
     """Read words from a string containing lines of text.
 
     Word, translation, and its part of speech are returned.

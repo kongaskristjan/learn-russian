@@ -1,6 +1,5 @@
 
 from src.file_io import Word, HistoryEntry
-from typing import Optional
 
 class WordChoiceAlgorithm:
     """
@@ -17,52 +16,31 @@ class WordChoiceAlgorithm:
         self.false_answer_delay = false_answer_delay
 
         self.word_to_index = {word.word: i for i, word in enumerate(words)}
-        assert self.word_to_index[words[-1].word] == len(words) - 1
 
-        self.progress_index = 0
-        self.progress = []
+        self.schedule = [word.word for word in words]
+        assert len(self.schedule) == len(set(self.schedule)), "Duplicate words in words.csv"
+        
+        self.progress: list[HistoryEntry] = []
         self.times_correct = [0] * len(words)
-        self.next_scheduled: list[Optional[int]] = [i for i in range(len(words))]
 
         for entry in progress:
             self.update_progress(entry.word, entry.correct)
 
-    def get_next_word(self) -> Optional[Word]:
-        while self.progress_index < 10000:
-            word = self.get_next_word_inner()
-            if word is None:
-                self.update_progress("--- INCREMENT PROGRESS ---", True)
-                continue
-            return word
-        return None
-
-    def get_next_word_inner(self) -> Optional[Word]:
-        for i in range(len(self.words)):
-            if self.next_scheduled[i] is None:
-                continue
-            if self.next_scheduled[i] <= self.progress_index:
-                return self.words[i]
-
-        return None
+    def get_next_word(self) -> Word | None:
+        if self.schedule == []:
+            return None
+        word = self.schedule[0]
+        return self.words[self.word_to_index[word]]
 
     def update_progress(self, word: str, correct: bool) -> None:
-        if word == "--- INCREMENT PROGRESS ---":
-            self.progress_index += 1
-            return
-
-        index = self.word_to_index[word]
         self.progress.append(HistoryEntry(word, correct))
 
+        self.schedule.remove(word)
         if correct:
+            index = self.word_to_index[word]
             self.times_correct[index] += 1
 
-            if self.times_correct[index] == 1:
-                self.progress_index += 1
-
-            if self.times_correct[index] >= len(self.ask_schedule):
-                self.next_scheduled[index] = None
-            else:
-                self.next_scheduled[index] = self.progress_index + self.ask_schedule[self.times_correct[index]]
-
+            if self.times_correct[index] < len(self.ask_schedule):
+                self.schedule.insert(self.ask_schedule[self.times_correct[index]], word)
         else:
-            self.next_scheduled[index] = self.progress_index + self.false_answer_delay
+            self.schedule.insert(self.false_answer_delay, word)
