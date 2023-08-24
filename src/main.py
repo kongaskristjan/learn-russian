@@ -1,4 +1,5 @@
 
+import os
 from pathlib import Path
 from src.file_io import read_words, read_progress, write_progress, Word
 from src.algorithm import WordChoiceAlgorithm
@@ -6,8 +7,9 @@ from src.algorithm import WordChoiceAlgorithm
 def main() -> None:
     """A program to learn russian words from their translations."""
     words_path = Path("data/words.csv")
-    progress_path = Path("data/progress.txt")
-    progress_bak_path = Path("data/progress.txt.bak")
+    progress_path = Path("progress/progress.txt")
+    progress_bak_path = Path("progress/progress.txt.bak")
+    os.makedirs(progress_path.parent, exist_ok=True)
 
     algorithm = get_word_choice_algorithm(words_path, progress_path)
     while word := algorithm.get_next_word():
