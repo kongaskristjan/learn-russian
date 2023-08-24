@@ -52,3 +52,13 @@ def read_words(words: str) -> list[Word]:
     assert errors == 0, f"{errors} errors found"
 
     return words
+
+def write_words(words: list[Word]) -> str:
+    """Write words to a string containing CSV data.
+
+    Word, translation, and its part of speech are written.
+    """
+    output = ""
+    for word in words:
+        output += f"{word.word};{word.translation};{word.part_of_speech}\n"
+    return output
