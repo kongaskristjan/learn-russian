@@ -1,11 +1,11 @@
-
-from pathlib import Path
 import os
+from pathlib import Path
 
 import fire
 from reverso_api.context import ReversoContextAPI
 
-from src.file_io import read_words, write_words, Word
+from src.file_io import Word, read_words, write_words
+
 
 def main(inp: str, out: str) -> None:
     inp, out = Path(inp), Path(out)
@@ -20,21 +20,23 @@ def main(inp: str, out: str) -> None:
     out.write_text(write_words(words))
 
 
-def get_translations(word: str) -> str|None:
+def get_translations(word: str) -> str | None:
     translations = ReversoContextAPI(word, "", "ru", "en").get_translations()
     translations = list(translations)
     if len(translations) == 0:
         return None
-    
+
     translations.sort(key=lambda x: x.frequency, reverse=True)
 
     strs = []
     max_frequency = translations[0].frequency
-    for index, (source_word, translation, frequency, part_of_speech, inflected_forms) in enumerate(translations):
+    for index, (source_word, translation, frequency, part_of_speech, inflected_forms) in enumerate(
+        translations
+    ):
         if frequency < 0.25 * max_frequency or index >= 3:
             break
         strs.append(translation)
-    
+
     translation_str = ", ".join(strs)
     return translation_str
 

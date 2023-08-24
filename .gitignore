@@ -6,3 +6,5 @@ __pycache__
 progress
 
 data/words_ordered.csv
+
+Pipfile

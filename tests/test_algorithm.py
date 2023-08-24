@@ -1,6 +1,6 @@
-
 from src.algorithm import WordChoiceAlgorithm
 from src.file_io import Word
+
 
 def test_WordChoiceAlgorithm():
     words = [
@@ -20,7 +20,8 @@ def test_WordChoiceAlgorithm():
     assert algorithm.get_next_word() == words[1]
     algorithm.update_progress(words[1].word, True)
 
-    assert algorithm.get_next_word() == None
+    assert algorithm.get_next_word() is None
+
 
 def test_WordChoiceAlgorithm_false_entries():
     words = [
@@ -45,4 +46,4 @@ def test_WordChoiceAlgorithm_false_entries():
     assert algorithm.get_next_word() == words[1]
     algorithm.update_progress(words[1].word, True)
 
-    assert algorithm.get_next_word() == None
+    assert algorithm.get_next_word() is None

@@ -1,9 +1,9 @@
 from scripts.transform_words import read_words_from_lines
-from src.file_io import write_words, Word
+from src.file_io import Word, write_words
+
 
 def test_read_words_from_lines():
-    inp = \
-"""
+    inp = """
 и
 and, though				conjunction
 

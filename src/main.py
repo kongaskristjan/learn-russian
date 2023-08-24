@@ -1,8 +1,9 @@
-
 import os
 from pathlib import Path
-from src.file_io import read_words, read_progress, write_progress, Word
+
 from src.algorithm import WordChoiceAlgorithm
+from src.file_io import Word, read_progress, read_words, write_progress
+
 
 def main() -> None:
     """A program to learn russian words from their translations."""
@@ -22,6 +23,7 @@ def main() -> None:
         print()
     print(f"Congratulations! You have learned all {len(algorithm.words)} words!")
 
+
 def get_word_choice_algorithm(words_path: Path, progress_path: Path) -> WordChoiceAlgorithm:
     """Return an algorithm to choose words to ask."""
     ask_schedule = [0, 20, 50, 150, 500]
@@ -30,6 +32,7 @@ def get_word_choice_algorithm(words_path: Path, progress_path: Path) -> WordChoi
     words = read_words(words_path.read_text())
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
     return WordChoiceAlgorithm(words, progress, ask_schedule, false_answer_delay)
+
 
 def ask_word(word: Word) -> bool:
     """Ask a word and return whether the user answered correctly."""
@@ -44,6 +47,7 @@ def ask_word(word: Word) -> bool:
     print()
     print()
     return correct
+
 
 if __name__ == "__main__":
     main()
