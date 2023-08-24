@@ -23,7 +23,7 @@ def main() -> None:
 def get_word_choice_algorithm(words_path: Path, progress_path: Path) -> WordChoiceAlgorithm:
     """Return an algorithm to choose words to ask."""
     ask_schedule = [0, 20, 50, 150, 500]
-    false_answer_delay = 20
+    false_answer_delay = 5
 
     words = read_words(words_path.read_text())
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
@@ -33,15 +33,14 @@ def ask_word(word: Word) -> bool:
     """Ask a word and return whether the user answered correctly."""
     answer = input(f"{word.translation} ({word.part_of_speech}): ")
     correct = answer == word.word
+    print()
+    print()
     if correct:
-        print()
-        print("+++       CORRECT       +++")
-        print()
+        print("+++              CORRECT              +++")
     else:
-        print()
-        print("---        WRONG        ---")
-        print()
-        print(f"The correct answer was {word.word}.")
+        print("---               WRONG               ---" + f"    (correct answer: {word.word})")
+    print()
+    print()
     return correct
 
 if __name__ == "__main__":
