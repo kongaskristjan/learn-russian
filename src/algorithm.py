@@ -1,3 +1,5 @@
+import random
+
 from src.file_io import HistoryEntry, Word
 
 
@@ -47,6 +49,11 @@ class WordChoiceAlgorithm:
             self.times_correct[index] += 1
 
             if self.times_correct[index] < len(self.ask_schedule):
-                self.schedule.insert(self.ask_schedule[self.times_correct[index]], word)
+                self.schedule_next(word, self.ask_schedule[self.times_correct[index]])
         else:
-            self.schedule.insert(self.false_answer_delay, word)
+            self.schedule_next(word, self.false_answer_delay)
+
+    def schedule_next(self, word: str, delay: int) -> None:
+        delay_range = int(delay * 0.15) + 2
+        delay = random.randint(delay - delay_range, delay + delay_range)
+        self.schedule.insert(delay, word)
