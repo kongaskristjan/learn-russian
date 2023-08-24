@@ -22,5 +22,5 @@ def test_write_words_to_csv_str():
         Word("и", "and, though", "conjunction"),
         Word("в", "in, at", "preposition"),
     ]
-    expected = "и;and, though;conjunction\nв;in, at;preposition\n"
+    expected = "и;and, though;conjunction;\nв;in, at;preposition;\n"
     assert write_words(inp) == expected
