@@ -1,4 +1,5 @@
-from scripts.transform_words import read_words_from_lines, write_words_to_csv_str
+from scripts.transform_words import read_words_from_lines
+from src.file_io import write_words, Word
 
 def test_read_words_from_lines():
     inp = \
@@ -10,16 +11,16 @@ and, though				conjunction
 in, at				preposition
 """
     expected = [
-        ("и", "and, though", "conjunction"),
-        ("в", "in, at", "preposition"),
+        Word("и", "and, though", "conjunction"),
+        Word("в", "in, at", "preposition"),
     ]
     assert read_words_from_lines(inp) == expected
 
 
 def test_write_words_to_csv_str():
     inp = [
-        ("и", "and, though", "conjunction"),
-        ("в", "in, at", "preposition"),
+        Word("и", "and, though", "conjunction"),
+        Word("в", "in, at", "preposition"),
     ]
     expected = "и;and, though;conjunction\nв;in, at;preposition\n"
-    assert write_words_to_csv_str(inp) == expected
+    assert write_words(inp) == expected
