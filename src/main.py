@@ -45,6 +45,8 @@ def ask_word(word: Word) -> bool:
     else:
         print("---               WRONG               ---" + f"    (correct answer: {word.word})")
     print()
+    print(f"{word.word}: {word.example}")
+    print()
     print()
     return correct
 
