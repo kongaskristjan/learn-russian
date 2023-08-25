@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 
 import fire
@@ -13,6 +14,7 @@ def main(inp: str, out: str) -> None:
     for i, word in enumerate(words):
         word.example = get_example(word.word)
         print(f"{i} - {word.word}: {word.example}")
+        time.sleep(5)  # to avoid getting blocked by Reverso
 
     os.makedirs(out.parent, exist_ok=True)
     out.write_text(write_words(words))
@@ -21,10 +23,13 @@ def main(inp: str, out: str) -> None:
 def get_example(word: str) -> str:
     api = ReversoContextAPI(word, "", "ru", "en")
     examples = api.get_examples()
-    example = next(examples, None)
+    try:
+        example = next(examples, None)
+    except Exception:
+        example = None
+
     if not example:
         return ""
-
     return example[0].text
 
 
