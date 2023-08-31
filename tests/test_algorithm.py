@@ -1,5 +1,5 @@
-from src.algorithm import WordChoiceAlgorithm
-from src.file_io import Word
+from src.lib.algorithm import WordChoiceAlgorithm
+from src.lib.file_io import Word
 
 
 def test_WordChoiceAlgorithm():

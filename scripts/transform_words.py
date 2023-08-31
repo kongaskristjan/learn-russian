@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from src.file_io import Word, write_words
+from src.lib.file_io import Word, write_words
 
 
 def read_words_from_lines(input: str) -> list[Word]:

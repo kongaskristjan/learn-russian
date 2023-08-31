@@ -5,7 +5,7 @@ from pathlib import Path
 import fire
 from reverso_api.context import ReversoContextAPI
 
-from src.file_io import Word, read_words, write_words
+from src.lib.file_io import Word, read_words, write_words
 
 
 def main(inp: str, out: str) -> None:

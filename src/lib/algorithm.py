@@ -1,6 +1,6 @@
 import random
 
-from src.file_io import HistoryEntry, Word
+from src.lib.file_io import HistoryEntry, Word
 
 
 class WordChoiceAlgorithm:
