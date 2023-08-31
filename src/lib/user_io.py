@@ -1,5 +1,5 @@
-
 from src.lib.file_io import Word
+
 
 def ask_word(word: Word, to_english: bool = False) -> bool:
     """Ask a word and return whether the user answered correctly."""
@@ -18,8 +18,8 @@ def ask_word(word: Word, to_english: bool = False) -> bool:
         print("+++              CORRECT              +++")
     else:
         print("---               WRONG               ---" + f"    (correct answer: {translation_str})")
-    #print()
-    #print(f"{word_str}: {word.example}")
+    # print()
+    # print(f"{word_str}: {word.example}")
     print()
     print()
     return correct

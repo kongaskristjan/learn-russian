@@ -5,6 +5,7 @@ from src.lib.algorithm import WordChoiceAlgorithm
 from src.lib.file_io import read_progress, read_words, write_progress
 from src.lib.user_io import ask_word
 
+
 def main() -> None:
     """A program to learn russian words from their translations."""
     words_path = Path("data/words.csv")

@@ -1,4 +1,10 @@
-from src.lib.file_io import HistoryEntry, Word, read_progress, read_words, write_progress
+from src.lib.file_io import (
+    HistoryEntry,
+    Word,
+    read_progress,
+    read_words,
+    write_progress,
+)
 
 
 def test_read_words():

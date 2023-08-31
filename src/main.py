@@ -1,10 +1,18 @@
-import copy, random, os
+import copy
+import random
 from pathlib import Path
 
 import fire
 
-from src.lib.file_io import read_progress, read_words, write_progress, Word, HistoryEntry
+from src.lib.file_io import (
+    HistoryEntry,
+    Word,
+    read_progress,
+    read_words,
+    write_progress,
+)
 from src.lib.user_io import ask_word
+
 
 def main(lesson_size: int = 15) -> None:
     """A program to learn russian words from their translations."""
