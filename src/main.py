@@ -11,7 +11,8 @@ def main(lesson_size: int = 15) -> None:
     words_path = Path("data/words.csv")
     progress_path = Path("progress/progress_lessons.txt")
 
-    words = get_current_lesson_words(words_path, progress_path, lesson_size)
+    progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
+    words = get_current_lesson_words(words_path, progress, lesson_size)
 
     print(f"\nTranslate {len(words)} words from russian to english:\n")
     run_lesson(words, to_english=True)
@@ -19,7 +20,7 @@ def main(lesson_size: int = 15) -> None:
     run_lesson(words, to_english=False)
     print("\nGreat job! Lesson finished! See you next time!\n")
 
-    progress = [HistoryEntry(word.word, True) for word in words]
+    progress.extend([HistoryEntry(word.word, True) for word in words])
     progress_path.write_text(write_progress(progress))
 
 
@@ -38,10 +39,9 @@ def run_lesson(words: list[Word], to_english: bool) -> None:
         print()
 
 
-def get_current_lesson_words(words_path: Path, progress_path: Path, lesson_size: int) -> list[Word]:
+def get_current_lesson_words(words_path: Path, progress: list[HistoryEntry], lesson_size: int) -> list[Word]:
     """Return a list of words for the current lesson."""
     words = read_words(words_path.read_text())
-    progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
     entries = [entry.word for entry in progress if entry.correct]
     remaining_words = [word for word in words if word.word not in entries]
 
