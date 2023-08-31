@@ -7,7 +7,11 @@ def ask_word(word: Word, to_english: bool = False) -> bool:
     translation_str = word.translation if to_english else word.word
 
     answer = input(f"{word_str} ({word.part_of_speech}): ")
-    correct = answer == translation_str.split(",")[0]
+
+    translations = translation_str.split(",")
+    translations = [t.strip() for t in translations]
+    correct = answer in translations
+
     print()
     print()
     if correct:

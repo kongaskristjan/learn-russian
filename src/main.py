@@ -34,7 +34,7 @@ def run_lesson(words: list[Word], to_english: bool) -> None:
             correct = ask_word(word, to_english=to_english)
             if correct:
                 words.remove(word)
-        print(f"Progress: {n_initial_words - len(words)}/{n_initial_words})")
+        print(f"Progress: {n_initial_words - len(words)}/{n_initial_words}")
         print()
 
 
@@ -43,7 +43,7 @@ def get_current_lesson_words(words_path: Path, progress_path: Path, lesson_size:
     words = read_words(words_path.read_text())
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
     entries = [entry.word for entry in progress if entry.correct]
-    remaining_words = [word for word in words if word not in entries]
+    remaining_words = [word for word in words if word.word not in entries]
 
     return remaining_words[:lesson_size]
 

@@ -8,7 +8,7 @@ class Word:
     def __repr__(self):
         return f"({self.word}; {self.translation}; {self.part_of_speech}; {self.example})"
 
-    def __eq__(self, other):
+    def __eq__(self, other: "Word"):
         return (
             self.word == other.word
             and self.translation == other.translation
@@ -31,8 +31,8 @@ class HistoryEntry:
 
 def read_progress(progress: str) -> list[HistoryEntry]:
     """Read progress from a string containing CSV data."""
-    progress = progress.splitlines()
-    entries = [e.split(";") for e in progress]
+    progress_lines = progress.splitlines()
+    entries = [e.split(";") for e in progress_lines]
     entries = [HistoryEntry(e[0], e[1] == "True") for e in entries]
     return entries
 
@@ -44,12 +44,12 @@ def write_progress(progress: list[HistoryEntry]) -> str:
 
 def read_words(words: str) -> list[Word]:
     """Read words from a string containing CSV data."""
-    words = words.splitlines()
-    words = [word.split(";") for word in words]
-    words = [Word(word[0], word[1], word[2], word[3]) for word in words]
+    word_lines = words.splitlines()
+    word_list = [word.split(";") for word in word_lines]
+    word_list = [Word(word[0], word[1], word[2], word[3]) for word in word_list]
 
-    seen_words = {w.word: 0 for w in words}
-    for word in words:
+    seen_words = {w.word: 0 for w in word_list}
+    for word in word_list:
         seen_words[word.word] += 1
 
     errors = 0
@@ -59,7 +59,7 @@ def read_words(words: str) -> list[Word]:
             errors += 1
     assert errors == 0, f"{errors} errors found"
 
-    return words
+    return word_list
 
 
 def write_words(words: list[Word]) -> str:
