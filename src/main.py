@@ -14,7 +14,7 @@ from src.lib.file_io import (
 from src.lib.user_io import ask_word
 
 
-def main(lesson_size: int = 15) -> None:
+def main(lesson_size: int = 20) -> None:
     """A program to learn russian words from their translations."""
     words_path = Path("data/words.csv")
     progress_path = Path("progress/progress_lessons.txt")
@@ -24,7 +24,13 @@ def main(lesson_size: int = 15) -> None:
 
     print(f"\nTranslate {len(words)} words from russian to english:\n")
     run_lesson(words, to_english=True)
-    print(f"\nTranslate {len(words)} words from english to russian:\n")
+
+    print()
+    for i in range(3):
+        print("-------------------------------------------")
+
+    print("\nGreat job! Now let's do the other way around!")
+    print(f"Translate {len(words)} words from english to russian:\n")
     run_lesson(words, to_english=False)
     print("\nGreat job! Lesson finished! See you next time!\n")
 
@@ -35,15 +41,20 @@ def main(lesson_size: int = 15) -> None:
 def run_lesson(words: list[Word], to_english: bool) -> None:
     """Run a lesson with the given words."""
 
-    n_initial_words = len(words)
     words = copy.deepcopy(words)
-    while words:
+    removed_words: set[str] = set()
+    while len(words) > len(removed_words):
         random.shuffle(words)
         for word in words:
+            if word.word in removed_words:
+                continue
+
             correct = ask_word(word, to_english=to_english)
             if correct:
-                words.remove(word)
-        print(f"Progress: {n_initial_words - len(words)}/{n_initial_words}")
+                removed_words.add(word.word)
+
+        print("\n-------------------------------------------\n")
+        print(f"Progress: {len(removed_words)}/{len(words)}")
         print()
 
 

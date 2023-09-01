@@ -13,13 +13,11 @@ def ask_word(word: Word, to_english: bool = False) -> bool:
     correct = answer in translations
 
     print()
-    print()
     if correct:
         print("+++              CORRECT              +++")
     else:
         print("---               WRONG               ---" + f"    (correct answer: {translation_str})")
     # print()
     # print(f"{word_str}: {word.example}")
-    print()
     print()
     return correct
