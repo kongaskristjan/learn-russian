@@ -11,7 +11,7 @@ from src.lib.file_io import (
     read_words,
     write_progress,
 )
-from src.lib.user_io import ask_word
+from src.lib.user_io import ask_word, clear_screen
 
 
 def main(lesson_size: int = 20) -> None:
@@ -22,6 +22,7 @@ def main(lesson_size: int = 20) -> None:
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
     words = get_current_lesson_words(words_path, progress, lesson_size)
 
+    clear_screen()
     print(f"\nTranslate {len(words)} words from russian to english:\n")
     run_lesson(words, to_english=True)
 
@@ -44,6 +45,19 @@ def run_lesson(words: list[Word], to_english: bool) -> None:
     words = copy.deepcopy(words)
     removed_words: set[str] = set()
     while len(words) > len(removed_words):
+        print("\n-------------------------------------------\n")
+        print("Words to repeat:")
+        for word in words:
+            if word.word not in removed_words:
+                word_str = word.word if to_english else word.translation
+                translation_str = word.translation if to_english else word.word
+                print(f"{word_str} - {translation_str}")
+        print("\n-------------------------------------------\n")
+        print(f"Progress: {len(removed_words)}/{len(words)}")
+        print()
+        input("Press enter to continue...")
+        clear_screen()
+
         random.shuffle(words)
         for word in words:
             if word.word in removed_words:
@@ -53,9 +67,8 @@ def run_lesson(words: list[Word], to_english: bool) -> None:
             if correct:
                 removed_words.add(word.word)
 
-        print("\n-------------------------------------------\n")
-        print(f"Progress: {len(removed_words)}/{len(words)}")
-        print()
+        input("Press enter to continue...")
+        clear_screen()
 
 
 def get_current_lesson_words(words_path: Path, progress: list[HistoryEntry], lesson_size: int) -> list[Word]:

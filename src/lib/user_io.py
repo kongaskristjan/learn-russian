@@ -21,3 +21,6 @@ def ask_word(word: Word, to_english: bool = False) -> bool:
     # print(f"{word_str}: {word.example}")
     print()
     return correct
+
+def clear_screen():
+    print("\n" * 100)
