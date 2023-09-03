@@ -14,7 +14,7 @@ from src.lib.file_io import (
 from src.lib.user_io import ask_word, clear_screen
 
 
-def main(lesson_size: int = 20) -> None:
+def main(lesson_size: int = 15) -> None:
     """A program to learn russian words from their translations."""
     words_path = Path("data/words.csv")
     progress_path = Path("progress/progress_lessons.txt")
