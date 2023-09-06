@@ -1,5 +1,6 @@
 import copy
 import random
+import time
 from pathlib import Path
 
 import fire
@@ -22,6 +23,8 @@ def main(lesson_size: int = 15) -> None:
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
     words = get_current_lesson_words(words_path, progress, lesson_size)
 
+    t = time.time()
+
     clear_screen()
     print(f"\nTranslate {len(words)} words from russian to english:\n")
     run_lesson(words, to_english=True)
@@ -33,10 +36,14 @@ def main(lesson_size: int = 15) -> None:
     print("\nGreat job! Now let's do the other way around!")
     print(f"Translate {len(words)} words from english to russian:\n")
     run_lesson(words, to_english=False)
-    print("\nGreat job! Lesson finished! See you next time!\n")
 
     progress.extend([HistoryEntry(word.word, True) for word in words])
     progress_path.write_text(write_progress(progress))
+
+    delta = int(time.time() - t)
+    min, sec = delta // 60, delta % 60
+    print(f"\nGreat job! Lesson finished in {min} minutes and {sec} seconds! See you next time!\n")
+    print(f"Progress: {len(progress)}/{len(read_words(words_path.read_text()))}")
 
 
 def run_lesson(words: list[Word], to_english: bool) -> None:
