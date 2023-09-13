@@ -6,7 +6,7 @@ def ask_word(word: Word, to_english: bool = False) -> bool:
     word_str = word.word if to_english else word.translation
     translation_str = word.translation if to_english else word.word
 
-    answer = input(f"{word_str} ({word.part_of_speech}): ")
+    answer = input(f"{word_str}: ")
 
     translations = translation_str.split(",")
     translations = [t.strip() for t in translations]
