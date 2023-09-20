@@ -37,13 +37,15 @@ def main(lesson_size: int = 15, previous: bool = False) -> None:
     print(f"Translate {len(words)} words from english to russian:\n")
     run_lesson(words, to_english=False)
 
-    progress.extend([HistoryEntry(word.word, True) for word in words])
-    progress_path.write_text(write_progress(progress))
+    if not previous:
+        progress.extend([HistoryEntry(word.word, True) for word in words])
+        progress_path.write_text(write_progress(progress))
 
     delta = int(time.time() - t)
     min, sec = delta // 60, delta % 60
     print(f"\nGreat job! Lesson finished in {min} minutes and {sec} seconds! See you next time!\n")
-    print(f"Progress: {len(progress)}/{len(read_words(words_path.read_text()))}")
+    if not previous:
+        print(f"Progress: {len(progress)}/{len(read_words(words_path.read_text()))}")
 
 
 def run_lesson(words: list[Word], to_english: bool) -> None:
