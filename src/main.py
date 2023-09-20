@@ -15,13 +15,13 @@ from src.lib.file_io import (
 from src.lib.user_io import ask_word, clear_screen, show_words_to_repeat
 
 
-def main(lesson_size: int = 15) -> None:
+def main(lesson_size: int = 15, previous: bool = False) -> None:
     """A program to learn russian words from their translations."""
     words_path = Path("data/words.csv")
     progress_path = Path("progress/progress_lessons.txt")
 
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
-    words = get_current_lesson_words(words_path, progress, lesson_size)
+    words = get_current_lesson_words(words_path, progress, lesson_size, previous)
 
     t = time.time()
 
@@ -67,10 +67,14 @@ def run_lesson(words: list[Word], to_english: bool) -> None:
         clear_screen()
 
 
-def get_current_lesson_words(words_path: Path, progress: list[HistoryEntry], lesson_size: int) -> list[Word]:
+def get_current_lesson_words(
+    words_path: Path, progress: list[HistoryEntry], lesson_size: int, previous: bool
+) -> list[Word]:
     """Return a list of words for the current lesson."""
     words = read_words(words_path.read_text())
     entries = [entry.word for entry in progress if entry.correct]
+    if previous:
+        entries = entries[:-lesson_size]
     remaining_words = [word for word in words if word.word not in entries]
 
     return remaining_words[:lesson_size]
