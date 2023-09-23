@@ -1,9 +1,11 @@
 import os
 import re
+import time
 from pathlib import Path
 
 import fire
 import openai
+from openai.error import RateLimitError
 
 from src.lib.file_io import Word, read_words, write_words
 
@@ -21,7 +23,14 @@ def main(inp: str, out: str) -> None:
     new_words = []
 
     for i, word in enumerate(words):
-        new_word = get_word(word.word)
+        while True:
+            try:
+                new_word = get_word(word.word)
+                break
+            except RateLimitError:
+                print("Openai rate limit exceeded. Waiting 60 seconds...")
+                time.sleep(60)
+
         if new_word is None:
             print(f"\n\n -----------------------   Error: Could not get word {word.word}   -----------------------\n\n")  # fmt: skip
             new_word = Word(word.word, word.translation, "", "")
@@ -30,6 +39,7 @@ def main(inp: str, out: str) -> None:
         print(f"#{i} ({price:>6.2f}$ used) {new_word.word:>12} - {new_word.translation:<12}  {new_word.example:>50} - {new_word.example_translation:<50}")  # fmt: skip
         new_words.append(new_word)
         out_path.write_text(write_words(new_words))
+        time.sleep(1)  # Don't exceed the OpenAI API rate limit
 
 
 def get_word(word: str) -> Word | None:
