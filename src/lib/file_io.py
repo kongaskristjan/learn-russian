@@ -1,19 +1,19 @@
 class Word:
-    def __init__(self, word: str, translation: str, part_of_speech: str, example: str = ""):
+    def __init__(self, word: str, translation: str, example: str, example_translation: str):
         self.word = word
         self.translation = translation
-        self.part_of_speech = part_of_speech
         self.example = example
+        self.example_translation = example_translation
 
     def __repr__(self):
-        return f"({self.word}; {self.translation}; {self.part_of_speech}; {self.example})"
+        return f"({self.word}; {self.translation}; {self.example}; {self.example_translation})"
 
     def __eq__(self, other: "Word"):
         return (
             self.word == other.word
             and self.translation == other.translation
-            and self.part_of_speech == other.part_of_speech
             and self.example == other.example
+            and self.example_translation == other.example_translation
         )
 
 
@@ -63,11 +63,8 @@ def read_words(words: str) -> list[Word]:
 
 
 def write_words(words: list[Word]) -> str:
-    """Write words to a string containing CSV data.
-
-    Word, translation, and its part of speech are written.
-    """
+    """Write words to a string containing CSV data."""
     output = ""
     for word in words:
-        output += f"{word.word};{word.translation};{word.part_of_speech};{word.example}\n"
+        output += f"{word.word};{word.translation};{word.example};{word.example_translation}\n"
     return output
