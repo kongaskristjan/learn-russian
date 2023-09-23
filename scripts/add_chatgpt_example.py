@@ -1,5 +1,5 @@
-import re
 import os
+import re
 from pathlib import Path
 
 import fire
@@ -11,6 +11,7 @@ prompt_tokens = 0
 completion_tokens = 0
 model = "gpt-4"
 
+
 def main(inp: str, out: str) -> None:
     openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -19,12 +20,12 @@ def main(inp: str, out: str) -> None:
     for i, word in enumerate(words):
         new_word = get_word(word.word)
         if new_word is None:
-            print(f"\n\n -----------------------   Error: Could not get word {word.word}   -----------------------\n\n")
+            print(f"\n\n -----------------------   Error: Could not get word {word.word}   -----------------------\n\n")  # fmt: skip
             new_word = Word(word.word, word.translation, "", "")
             continue
 
         price = compute_price()
-        print(f"{i} - {new_word.word} - {new_word.translation}: {new_word.example} - {new_word.example_translation} ({price:.03f}$ used)")
+        print(f"{i} - {new_word.word} - {new_word.translation}: {new_word.example} - {new_word.example_translation} ({price:.03f}$ used)")  # fmt: skip
 
     os.makedirs(out_path.parent, exist_ok=True)
     out_path.write_text(write_words(words))
@@ -51,9 +52,9 @@ Example translation: [english translation of example sentence]"""
 
 def extract_params(response: str) -> dict[str, str]:
     patterns = {
-        'Translation': re.compile(r'Translation:\s*(.+)', re.IGNORECASE),
-        'Example': re.compile(r'Example:\s*(.+)', re.IGNORECASE),
-        'Example translation': re.compile(r'Example translation:\s*(.+)', re.IGNORECASE)
+        "Translation": re.compile(r"Translation:\s*(.+)", re.IGNORECASE),
+        "Example": re.compile(r"Example:\s*(.+)", re.IGNORECASE),
+        "Example translation": re.compile(r"Example translation:\s*(.+)", re.IGNORECASE),
     }
     params = {}
 

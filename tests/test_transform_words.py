@@ -11,16 +11,16 @@ and, though				conjunction
 in, at				preposition
 """
     expected = [
-        Word("и", "and, though", "conjunction"),
-        Word("в", "in, at", "preposition"),
+        Word("и", "and, though", "", ""),
+        Word("в", "in, at", "", ""),
     ]
     assert read_words_from_lines(inp) == expected
 
 
 def test_write_words_to_csv_str():
     inp = [
-        Word("и", "and, though", "conjunction"),
-        Word("в", "in, at", "preposition"),
+        Word("и", "and, though", "Russian example", "English example"),
+        Word("в", "in, at", "Russian example", "English example"),
     ]
-    expected = "и;and, though;conjunction;\nв;in, at;preposition;\n"
+    expected = "и;and, though;Russian example;English example\nв;in, at;Russian example;English example\n"
     assert write_words(inp) == expected

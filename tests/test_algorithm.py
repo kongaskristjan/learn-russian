@@ -4,8 +4,8 @@ from src.lib.file_io import Word
 
 def test_WordChoiceAlgorithm():
     words = [
-        Word("и", "and, though", "conjunction"),
-        Word("в", "in, at", "preposition"),
+        Word("и", "and, though", "", ""),
+        Word("в", "in, at", "", ""),
     ]
     ask_schedule = [0, 20]
 
@@ -25,8 +25,8 @@ def test_WordChoiceAlgorithm():
 
 def test_WordChoiceAlgorithm_false_entries():
     words = [
-        Word("и", "and, though", "conjunction"),
-        Word("в", "in, at", "preposition"),
+        Word("и", "and, though", "", ""),
+        Word("в", "in, at", "", ""),
     ]
     ask_schedule = [0, 20]
 

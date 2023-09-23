@@ -16,7 +16,8 @@ def read_words_from_lines(input: str) -> list[Word]:
             Word(
                 lines[i + 1].strip(),
                 lines[i + 2].split("\t")[0].strip(),
-                lines[i + 2].split("\t")[-1].strip(),
+                "",
+                "",
             )
         )
     return words
