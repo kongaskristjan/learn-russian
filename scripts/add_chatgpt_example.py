@@ -62,7 +62,6 @@ def extract_params(response: str) -> dict[str, str]:
     for key, pattern in patterns.items():
         match = pattern.search(response)
         params[key] = match.group(1).strip() if match else None
-    params["Example"] = None
     return params
 
 
