@@ -31,12 +31,15 @@ def clear_screen(prompt: bool = True):
 
 
 def show_words_to_repeat(removed_words: set[str], words: list[Word], to_english: bool):
+    # Find max length of words
+    max_len = max([len(word.word) for word in words if word.word not in removed_words])
+
     print("\n-------------------------------------------\n")
     print("Words to repeat:")
     for word in words:
         if word.word not in removed_words:
             word_str = word.word if to_english else word.translation
             translation_str = word.translation if to_english else word.word
-            print(f"{word_str}{' ' * (23 - len(word_str))} {translation_str}")
+            print(f"{word_str:{max_len}}   {translation_str}")
     print("\n-------------------------------------------\n")
     print(f"Progress: {len(removed_words)}/{len(words)}")

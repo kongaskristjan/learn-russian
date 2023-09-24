@@ -15,13 +15,14 @@ from src.lib.file_io import (
 from src.lib.user_io import ask_word, clear_screen, show_words_to_repeat
 
 
-def main(lesson_size: int = 15, previous: bool = False) -> None:
+def main(lesson_size: int = 15, previous: bool = False, sentences: bool = False) -> None:
     """A program to learn russian words from their translations."""
     words_path = Path("data/words.csv")
     progress_path = Path("progress/progress_lessons.txt")
+    save_progress = not (previous or sentences)
 
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
-    words = get_current_lesson_words(words_path, progress, lesson_size, previous)
+    words = get_current_lesson_words(words_path, progress, lesson_size, previous, sentences)
 
     t = time.time()
 
@@ -37,14 +38,14 @@ def main(lesson_size: int = 15, previous: bool = False) -> None:
     print(f"Translate {len(words)} words from english to russian:\n")
     run_lesson(words, to_english=False)
 
-    if not previous:
+    if save_progress:
         progress.extend([HistoryEntry(word.word, True) for word in words])
         progress_path.write_text(write_progress(progress))
 
     delta = int(time.time() - t)
     min, sec = delta // 60, delta % 60
     print(f"\nGreat job! Lesson finished in {min} minutes and {sec} seconds! See you next time!\n")
-    if not previous:
+    if save_progress:
         print(f"Progress: {len(progress)}/{len(read_words(words_path.read_text()))}")
 
 
@@ -70,14 +71,22 @@ def run_lesson(words: list[Word], to_english: bool) -> None:
 
 
 def get_current_lesson_words(
-    words_path: Path, progress: list[HistoryEntry], lesson_size: int, previous: bool
+    words_path: Path, progress: list[HistoryEntry], lesson_size: int, previous: bool, sentences: bool
 ) -> list[Word]:
     """Return a list of words for the current lesson."""
     words = read_words(words_path.read_text())
     entries = [entry.word for entry in progress if entry.correct]
-    if previous:
-        entries = entries[:-lesson_size]
+
+    if previous or sentences:
+        delta = 300 if sentences else 35
+        entries = entries[delta:delta+lesson_size]
     remaining_words = [word for word in words if word.word not in entries]
+
+    # Swap words and sentences if necessary
+    if sentences:
+        for word in remaining_words:
+            word.word, word.example = word.example, word.word
+            word.translation, word.example_translation = word.example_translation, word.translation
 
     return remaining_words[:lesson_size]
 
