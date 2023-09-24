@@ -15,14 +15,23 @@ from src.lib.file_io import (
 from src.lib.user_io import ask_word, clear_screen, show_words_to_repeat
 
 
-def main(lesson_size: int = 15, previous: bool = False, sentences: bool = False) -> None:
+def main(previous: bool = False, sentences: bool = False) -> None:
     """A program to learn russian words from their translations."""
     words_path = Path("data/words.csv")
-    progress_path = Path("progress/progress_lessons.txt")
-    save_progress = not (previous or sentences)
+    if sentences:
+        progress_path = Path("progress/progress_sentences.txt")
+        lesson_size = 7
+    else:
+        progress_path = Path("progress/progress_lessons.txt")
+        lesson_size = 15
 
     progress = read_progress(progress_path.read_text()) if progress_path.exists() else []
-    words = get_current_lesson_words(words_path, progress, lesson_size, previous, sentences)
+    words = get_current_lesson_words(words_path, progress, lesson_size, previous)
+    if sentences:
+        for word in words:
+            word.word, word.example = word.example, word.word
+            word.translation, word.example_translation = word.example_translation, word.translation
+
 
     t = time.time()
 
@@ -38,6 +47,7 @@ def main(lesson_size: int = 15, previous: bool = False, sentences: bool = False)
     print(f"Translate {len(words)} words from english to russian:\n")
     run_lesson(words, to_english=False)
 
+    save_progress = not previous
     if save_progress:
         progress.extend([HistoryEntry(word.word, True) for word in words])
         progress_path.write_text(write_progress(progress))
@@ -71,8 +81,7 @@ def run_lesson(words: list[Word], to_english: bool) -> None:
 
 
 def get_current_lesson_words(
-    words_path: Path, progress: list[HistoryEntry], lesson_size: int, previous: bool, sentences: bool
-) -> list[Word]:
+    words_path: Path, progress: list[HistoryEntry], lesson_size: int, previous: bool) -> list[Word]:
     """Return a list of words for the current lesson."""
     words = read_words(words_path.read_text())
     entries = [entry.word for entry in progress if entry.correct]
@@ -80,12 +89,6 @@ def get_current_lesson_words(
     if previous:
         selected = entries[-35:-35+lesson_size]
         return [word for word in words if word.word in selected]
-    if sentences:
-        selected = [word for word in words if word.word in entries[-300:-300+5]]
-        for word in selected:
-            word.word, word.example = word.example, word.word
-            word.translation, word.example_translation = word.example_translation, word.translation
-        return selected
     return [word for word in words if word.word not in entries][:lesson_size]
 
 
