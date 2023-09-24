@@ -77,18 +77,16 @@ def get_current_lesson_words(
     words = read_words(words_path.read_text())
     entries = [entry.word for entry in progress if entry.correct]
 
-    if previous or sentences:
-        delta = 300 if sentences else 35
-        entries = entries[delta:delta+lesson_size]
-    remaining_words = [word for word in words if word.word not in entries]
-
-    # Swap words and sentences if necessary
+    if previous:
+        selected = entries[-35:-35+lesson_size]
+        return [word for word in words if word.word in selected]
     if sentences:
-        for word in remaining_words:
+        selected = [word for word in words if word.word in entries[-300:-300+6]]
+        for word in selected:
             word.word, word.example = word.example, word.word
             word.translation, word.example_translation = word.example_translation, word.translation
-
-    return remaining_words[:lesson_size]
+        return selected
+    return [word for word in words if word.word not in entries][:lesson_size]
 
 
 if __name__ == "__main__":
