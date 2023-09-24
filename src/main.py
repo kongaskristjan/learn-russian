@@ -81,7 +81,7 @@ def get_current_lesson_words(
         selected = entries[-35:-35+lesson_size]
         return [word for word in words if word.word in selected]
     if sentences:
-        selected = [word for word in words if word.word in entries[-300:-300+6]]
+        selected = [word for word in words if word.word in entries[-300:-300+5]]
         for word in selected:
             word.word, word.example = word.example, word.word
             word.translation, word.example_translation = word.example_translation, word.translation

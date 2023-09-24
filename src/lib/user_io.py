@@ -7,18 +7,13 @@ def ask_word(word: Word, to_english: bool = False) -> bool:
     translation_str = word.translation if to_english else word.word
 
     answer = input(f"{word_str}: ")
-
-    translations = translation_str.split(",")
-    translations = [t.strip() for t in translations]
-    correct = answer in translations
+    correct = answer.strip() == translation_str.strip()
 
     print()
     if correct:
         print("+++              CORRECT              +++")
     else:
         print("---               WRONG               ---" + f"    (correct answer: {translation_str})")
-    # print()
-    # print(f"{word_str}: {word.example}")
     print()
     return correct
 
